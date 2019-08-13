@@ -1,0 +1,41 @@
+# vim:syntax=sh
+# vim:filetype=sh
+# vim:foldlevel=0
+# vim:foldmethod=marker
+# vim:formatoptions=crqn1j
+
+# Path {{{
+alias  path='echo -e ${PATH//:/\\n}'
+alias  libpath='echo -e ${LD_LIBRARY_PATH//:/\\n}'
+# }}}
+
+# System {{{
+alias  du='du -kh'
+alias  df='df -kTh'
+
+alias  more='less'
+alias  grep='grep --color=auto'
+alias  free='free -h'
+alias  tree='tree -Csuh'
+
+alias  ll='ls -l --group-directories-first'
+alias  lr='ll -R'
+alias  la='ll -A'
+
+alias debug="set -o nounset; set -o xtrace"
+# }}}
+
+# Apps {{{
+
+# GnuPG {{{
+if [ -z "$GNUPGHOME" ]; then
+    alias gpg2="gpg2 --homedir ${GNUPGHOME}"
+fi
+# }}}
+
+# Tmux {{{
+alias tmux="tmux -f ${TMUX_CONFIG}"
+# }}}
+
+# }}}
+

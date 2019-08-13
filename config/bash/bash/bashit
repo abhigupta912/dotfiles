@@ -1,0 +1,35 @@
+# vim:syntax=sh
+# vim:filetype=sh
+# vim:foldlevel=0
+# vim:foldmethod=marker
+# vim:formatoptions=crqn1j
+
+# Reference: https://github.com/Bash-it/bash-it
+
+# Path to the bash it configuration
+export BASH_IT="${HOME}/.config/bash_it"
+
+# Lock and Load a custom theme file
+export BASH_IT_THEME='powerline-multiline'
+
+# Don't check mail when opening terminal.
+unset MAILCHECK
+
+# Change this to your console based IRC client of choice.
+export IRC_CLIENT='irssi'
+
+# Set this to false to turn off version control status checking within the prompt for all themes
+export SCM_CHECK=true
+
+# Set Xterm/screen/Tmux title with only a short hostname
+export SHORT_HOSTNAME=$(hostname -s)
+
+# Set Xterm/screen/Tmux title with only a short username
+export SHORT_USER=${USER:0:8}
+
+# Set Xterm/screen/Tmux title with shortened command and directory
+export SHORT_TERM_LINE=true
+
+# Load Bash It
+source "$BASH_IT"/bash_it.sh
+

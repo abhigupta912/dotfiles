@@ -1,0 +1,16 @@
+# vim:syntax=sh
+# vim:filetype=sh
+# vim:foldlevel=0
+# vim:foldmethod=marker
+# vim:formatoptions=crqn1j
+
+# Reference: https://www.topbug.net/blog/2016/11/28/a-better-ls-command/
+
+if ls --color -d . >/dev/null 2>&1; then
+    export COLUMNS
+
+    function ls {
+        command ls -F -h --color=always -v --author --time-style=long-iso -C "$@" | less -R -X -F
+    }
+fi
+

@@ -1,0 +1,23 @@
+# vim:syntax=sh
+# vim:filetype=sh
+# vim:foldlevel=0
+# vim:foldmethod=marker
+# vim:formatoptions=crqn1j
+
+# System {{{
+export SYSTEM=$(uname -s)
+
+case "${SYSTEM}" in
+    Linux*)
+        if [ -f ${HOME}/.config/shell/locales/in ]; then
+            source ${HOME}/.config/shell/locales/in
+        fi
+        ;;
+    Darwin*)
+        if [ -f ${HOME}/.config/shell/locales/us ]; then
+            source ${HOME}/.config/shell/locales/us
+        fi
+        ;;
+esac
+# }}}
+

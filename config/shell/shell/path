@@ -1,0 +1,75 @@
+# vim:syntax=sh
+# vim:filetype=sh
+# vim:foldlevel=0
+# vim:foldmethod=marker
+# vim:formatoptions=crqn1j
+
+# Initialization {{{
+# Reference: https://unix.stackexchange.com/questions/124444/how-can-i-cleanly-add-to-path
+function add_path() {
+    if [ -d $1 ]
+    then
+        case ":${PATH:=$1}:" in
+            *:"$1":*) ;;
+            *) PATH="$1:$PATH" ;;
+        esac;
+    fi
+}
+
+add_path /usr/local/sbin
+add_path /usr/local/bin
+# }}}
+
+# System {{{
+export SYSTEM=$(uname -s)
+
+case "${SYSTEM}" in
+    Linux*)
+        if [ -f ${HOME}/.config/shell/paths/linux ]; then
+            source ${HOME}/.config/shell/paths/linux
+        fi
+        ;;
+    Darwin*)
+        if [ -f ${HOME}/.config/shell/paths/darwin ]; then
+            source ${HOME}/.config/shell/paths/darwin
+        fi
+        ;;
+esac
+# }}}
+
+# App {{{
+
+# Go {{{
+if [ -d $HOME/go ]
+then
+    export GOPATH="$HOME/go"
+    add_path $GOPATH/bin
+fi
+# }}}
+
+# Rust {{{
+if [ -d $HOME/.cache/cargo ]
+then
+    add_path $HOME/.cache/cargo/bin
+fi
+# }}}
+
+# }}}
+
+# Deduplicate {{{
+# Reference: https://unix.stackexchange.com/questions/40749/remove-duplicate-path-entries-with-awk-command
+if [ -n "$PATH" ]; then
+    old_PATH=$PATH:; PATH=
+    while [ -n "$old_PATH" ]; do
+        x=${old_PATH%%:*}         # the first remaining entry
+        case $PATH: in
+            *:"$x":*) ;;          # already there
+            *) PATH=$PATH:$x ;;   # not there yet
+        esac
+        old_PATH=${old_PATH#*:}
+    done
+    PATH=${PATH#:}
+    unset old_PATH x
+fi
+# }}}
+

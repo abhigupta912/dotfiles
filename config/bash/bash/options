@@ -1,0 +1,148 @@
+# vim:syntax=sh
+# vim:filetype=sh
+# vim:foldlevel=0
+# vim:foldmethod=marker
+# vim:formatoptions=crqn1j
+
+# Reference: http://man7.org/linux/man-pages/man1/bash.1.html
+
+# set {{{
+set -o notify
+set -o ignoreeof
+set -o vi
+#set -o noclobber
+# }}}
+
+# shopt {{{
+shopt -s autocd
+
+# Value of variable to cd is treated as directory
+shopt -s cdable_vars
+
+# Fix spelling errors in directory name
+shopt -s cdspell
+
+# Check hashtable before executing command
+shopt -s checkhash
+
+# Check the window size after each external command
+shopt -s checkwinsize
+
+# Combine multiline commands into one in history
+shopt -s cmdhist
+
+# Include hidden files in pathname expansion
+shopt -s dotglob
+
+shopt -s expand_aliases
+
+#  Expand extended pattern matching features
+shopt -s extglob
+
+#  Enable pattern ** used in a pathname expansion
+shopt -s globstar
+
+shopt -s histappend
+
+# Edit a failed history substitution
+shopt -s histreedit
+
+shopt -s histverify
+
+shopt -s hostcomplete
+
+shopt -s interactive_comments
+
+shopt -u mailwarn
+
+shopt -s no_empty_cmd_completion
+
+shopt -s sourcepath
+# }}}
+
+# History {{{
+export HISTSIZE=10000
+export HISTFILESIZE=${HISTSIZE}
+export HISTCONTROL=ignoreboth
+
+# Ignore duplicates, ls without options and builtin commands
+HISTCONTROL=ignoredups
+export HISTIGNORE="&:ls:[bf]g:exit"
+# }}}
+
+# Disable core files
+ulimit -S -c 0 > /dev/null 2>&1
+
+# Complete {{{
+# Taken from http://tldp.org/LDP/abs/html/sample-bashrc.html
+
+# Hostnames taken from HOSTFILE shell variable
+complete -A hostname  rsh    rcp     telnet   rlogin ftp ping disk
+
+# Names of exported shell variables
+complete -A export    printenv
+
+# Names of all shell variables
+complete -A variable  export local   readonly unset
+
+# Names of enabled shell builtins
+complete -A enabled   builtin
+
+# Alias names
+complete -A alias     alias  unalias
+
+# Names of shell functions
+complete -A function  function
+
+# User names
+complete -A user      su     mail    finger
+
+# Help topics as accepted by the help builtin
+complete -A helptopic help
+
+# Option names as accepted by the shopt builtin
+complete -A shopt     shopt
+
+# Names of stopped jobs
+complete -A stopped   -P     '%'     bg
+
+# Job names, if job control is active
+complete -A job       -P     '%'     fg       jobs   disown
+
+# Directory {{{
+complete -A directory mkdir  rmdir
+complete -A directory -o     default cd
+# }}}
+
+# Compression {{{
+complete -f -o default -X '*.+(zip|ZIP)'                    zip
+complete -f -o default -X '!*.+(zip|ZIP)'                   unzip
+complete -f -o default -X '*.+(z|Z)'                        compress
+complete -f -o default -X '!*.+(z|Z)'                       uncompress
+complete -f -o default -X '*.+(gz|GZ)'                      gzip
+complete -f -o default -X '!*.+(gz|GZ)'                     gunzip
+complete -f -o default -X '*.+(bz2|BZ2)'                    bzip2
+complete -f -o default -X '!*.+(bz2|BZ2)'                   bunzip2
+complete -f -o default -X '!*.+(zip|ZIP|z|Z|gz|GZ|bz2|BZ2)' extract
+# }}}
+
+# Kill {{{
+_killall()
+{
+    local cur prev
+    COMPREPLY=()
+    cur=${COMP_WORDS[COMP_CWORD]}
+
+    COMPREPLY=( $( ps -u $USER -o comm  | \
+        sed -e '1,1d' -e 's#[]\[]##g' -e 's#^.*/##'| \
+        awk '{if ($0 ~ /^'$cur'/) print $0}' ))
+
+    return 0
+}
+
+complete -F _killall killall killps
+# }}}
+
+complete -cf sudo
+# }}}
+

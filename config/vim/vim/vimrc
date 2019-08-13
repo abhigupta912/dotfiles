@@ -1,0 +1,663 @@
+" vim:syntax=vim
+" vim:filetype=vim
+" vim:foldlevel=0
+" vim:foldmethod=marker
+" vim:formatoptions=crqn1j
+
+" Initialization {{{
+" Environment
+set undodir=$XDG_DATA_HOME/vim/undo
+set directory=$XDG_DATA_HOME/vim/swap
+set backupdir=$XDG_DATA_HOME/vim/backup
+set viminfo+=n$XDG_DATA_HOME/vim/viminfo
+set runtimepath=$XDG_CONFIG_HOME/vim,$XDG_DATA_HOME/vim,$VIMRUNTIME,$XDG_CONFIG_HOME/vim/after
+
+" Install vim-plug if not installed
+if empty(glob("$XDG_DATA_HOME/vim/autoload/plug.vim"))
+    silent !curl -fLo $XDG_DATA_HOME/vim/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+    autocmd VimEnter * PlugInstall
+endif
+
+" Global autogroup used through this file
+augroup vimrc
+    autocmd!
+augroup end
+
+" Set mapleader to space
+let g:mapleader      = "\<Space>"
+let g:maplocalleader = "\<Space>"
+" }}}
+
+" Plugins {{{
+let s:PluginDirPath = "$XDG_DATA_HOME/vim/"
+let s:PluginDirName = 'plugged'
+let s:PluginDir     = s:PluginDirPath.s:PluginDirName
+
+" Vim Plug {{{
+call plug#begin(s:PluginDir)
+
+" Targets {{{
+" Reference: https://github.com/andymass/vim-matchup
+" Replaces matchit.vim and matchparen. Must be before vim-sensible.
+Plug 'andymass/vim-matchup'
+
+" Reference: https://github.com/wellle/targets.vim
+Plug 'wellle/targets.vim'
+" }}}
+
+" Search / Motion {{{
+" Reference: https://github.com/haya14busa/vim-asterisk
+Plug 'haya14busa/vim-asterisk'
+
+" Reference: https://github.com/haya14busa/incsearch.vim
+Plug 'haya14busa/incsearch.vim'
+
+" Reference: https://github.com/haya14busa/incsearch-fuzzy.vim
+Plug 'haya14busa/incsearch-fuzzy.vim'
+
+" Reference: https://github.com/easymotion/vim-easymotion
+" Plug 'easymotion/vim-easymotion'
+
+" Reference: https://github.com/haya14busa/incsearch-easymotion.vim
+" Plug 'haya14busa/incsearch-easymotion.vim'
+
+" Reference: https://github.com/justinmk/vim-sneak
+Plug 'justinmk/vim-sneak'
+
+" Reference: https://github.com/unblevable/quick-scope
+" Plug 'unblevable/quick-scope'
+" }}}
+
+" Editing {{{
+" Reference: https://github.com/junegunn/vim-easy-align
+Plug 'junegunn/vim-easy-align'
+
+" Reference: https://github.com/ntpeters/vim-better-whitespace
+Plug 'ntpeters/vim-better-whitespace'
+
+" Reference: https://github.com/jiangmiao/auto-pairs
+" Plug 'jiangmiao/auto-pairs'
+
+" Comments {{{
+" Reference: https://github.com/manasthakur/vim-commentor
+Plug 'manasthakur/vim-commentor'
+" Reference: https://github.com/tpope/vim-commentary
+"Plug 'tpope/vim-commentary'
+" }}}
+
+" Reference: https://github.com/tpope/vim-surround
+Plug 'tpope/vim-surround'
+
+" Reference: https://github.com/tpope/vim-abolish
+Plug 'tpope/vim-abolish'
+
+" Reference: https://github.com/tommcdo/vim-exchange
+Plug 'tommcdo/vim-exchange'
+
+" Reference: https://github.com/tpope/vim-repeat
+Plug 'tpope/vim-repeat'
+
+" Reference: https://github.com/tpope/vim-unimpaired
+Plug 'tpope/vim-unimpaired'
+
+" Reference: https://github.com/inkarkat/vim-mark
+Plug 'inkarkat/vim-mark'
+" Settings {{{
+if !empty(globpath(&runtimepath, s:PluginDirName.'/vim-mark'))
+    " Disable mappings before loading plugin
+    let g:mw_no_mappings = 1
+endif
+" }}}
+" }}}
+
+" Fuzzy Finder {{{
+" FZF installed for bash/zsh/vim/neovim
+Plug '$XDG_CONFIG_HOME/fzf/fzf'
+
+" Reference: https://github.com/junegunn/fzf.vim
+Plug 'junegunn/fzf.vim'
+" Settings {{{
+if !empty(globpath(&runtimepath, s:PluginDirName.'/fzf.vim'))
+    let g:vim_loaded_fzf = 1
+endif
+" }}}
+" }}}
+
+" Git {{{
+" Reference: https://github.com/tpope/vim-fugitive
+Plug 'tpope/vim-fugitive'
+
+" Reference: https://github.com/airblade/vim-gitgutter
+Plug 'airblade/vim-gitgutter'
+" }}}
+
+" Nerdtree {{{
+" Reference: https://github.com/scrooloose/nerdtree
+Plug 'scrooloose/nerdtree'
+
+" Reference: https://github.com/Xuyuanp/nerdtree-git-plugin
+Plug 'Xuyuanp/nerdtree-git-plugin'
+" }}}
+
+" Colorschemes {{{
+" Reference: https://github.com/morhetz/gruvbox
+Plug 'morhetz/gruvbox'
+" Settings {{{
+if !empty(globpath(&runtimepath, s:PluginDirName.'/gruvbox'))
+    let g:gruvbox_contrast_dark = 'hard'
+endif
+" }}}
+
+" Reference: https://github.com/joshdick/onedark.vim
+Plug 'joshdick/onedark.vim'
+" Settings {{{
+if !empty(globpath(&runtimepath, s:PluginDirName.'/onedark.vim'))
+    let g:onedark_terminal_italics = 1
+endif
+" }}}
+
+" Reference: https://github.com/KeitaNakamura/neodark.vim
+Plug 'KeitaNakamura/neodark.vim'
+" Settings {{{
+if !empty(globpath(&runtimepath, s:PluginDirName.'/neodark.vim'))
+    let g:neodark#background      = '#202020'
+    let g:neodark#solid_vertsplit = 1
+    " let g:neodark#use_256color    = 1
+endif
+" }}}
+
+" Reference: https://github.com/ayu-theme/ayu-vim
+Plug 'ayu-theme/ayu-vim'
+" Settings {{{
+if !empty(globpath(&runtimepath, s:PluginDirName.'/ayu-vim'))
+    let ayucolor = "dark"
+endif
+" }}}
+
+" Reference: https://github.com/rakr/vim-one
+Plug 'rakr/vim-one'
+" Settings {{{
+if !empty(globpath(&runtimepath, s:PluginDirName.'/vim-one'))
+    let g:one_allow_italics = 1
+endif
+" }}}
+" }}}
+
+" Completion {{{
+" Deoplete {{{
+" Reference: https://github.com/Shougo/deoplete.nvim
+if has('nvim')
+    Plug 'Shougo/deoplete.nvim', { 'do': ':UpdateRemotePlugins' }
+else
+    Plug 'Shougo/deoplete.nvim'
+    Plug 'roxma/nvim-yarp'
+    Plug 'roxma/vim-hug-neovim-rpc'
+endif
+
+" Sources
+Plug 'deoplete-plugins/deoplete-go', { 'do': 'make'}
+" }}}
+
+" Snippets {{{
+" Reference: https://github.com/Shougo/neosnippet.vim
+Plug 'Shougo/neosnippet'
+Plug 'Shougo/neosnippet-snippets'
+" }}}
+
+" Language Specific {{{
+" Go {{{
+" Reference: https://github.com/fatih/vim-go
+Plug 'fatih/vim-go', { 'for': 'go', 'do': ':GoUpdateBinaries' }
+" }}}
+
+" Rust {{{
+" Reference: https://github.com/rust-lang/rust.vim
+Plug 'rust-lang/rust.vim', { 'for': 'rust' }
+" Settings {{{
+if !empty(globpath(&runtimepath, s:PluginDirName.'/vim-polyglot'))
+    "let g:polyglot_disabled = ['go', 'rust']
+endif
+" }}}
+" }}}
+
+" LanguageClient NeoVim {{{
+" Reference: https://github.com/autozimu/LanguageClient-neovim
+Plug 'autozimu/LanguageClient-neovim', {'branch': 'next', 'do': 'bash install.sh'}
+" }}}
+
+" Polygot {{{
+" Reference: https://github.com/sheerun/vim-polyglot
+Plug 'sheerun/vim-polyglot'
+" }}}
+" }}}
+
+" Formatting {{{
+" Reference: https://github.com/sbdchd/neoformat
+Plug 'sbdchd/neoformat'
+" Settings {{{
+if !empty(globpath(&runtimepath, s:PluginDirName.'/neoformat'))
+    " Enable alignment
+    let g:neoformat_basic_format_align = 1
+
+    " Enable tab to spaces conversion
+    let g:neoformat_basic_format_retab = 1
+
+    " Enable trimmming of trailing whitespace
+    let g:neoformat_basic_format_trim = 1
+
+    " Mappings
+    nnoremap <leader>= :<C-u>Neoformat<cr>
+endif
+" }}}
+" }}}
+
+" Syntax / Linting {{{
+" Reference: https://github.com/dense-analysis/ale
+Plug 'dense-analysis/ale'
+" }}}
+" }}}
+
+" Appearance {{{
+" Reference: https://github.com/itchyny/lightline.vim
+Plug 'itchyny/lightline.vim'
+
+" Reference: https://github.com/Yggdroot/indentLine
+Plug 'Yggdroot/indentLine'
+" Settings {{{
+if !empty(globpath(&runtimepath, s:PluginDirName.'/indentLine'))
+    let g:vim_loaded_indentline = 1
+endif
+" }}}
+
+" Reference: https://github.com/luochen1990/rainbow
+Plug 'luochen1990/rainbow'
+" Settings {{{
+if !empty(globpath(&runtimepath, s:PluginDirName.'/rainbow'))
+    let g:vim_loaded_rainbow = 1
+endif
+" }}}
+
+" Reference: https://github.com/chrisbra/Colorizer
+Plug 'chrisbra/Colorizer'
+
+" Reference: https://github.com/ryanoasis/vim-devicons
+Plug 'ryanoasis/vim-devicons'
+" }}}
+
+call plug#end()
+" }}}
+" }}}
+
+" General {{{
+filetype plugin indent on
+syntax   on
+
+" Allow setting title
+set title
+
+" Set utf-8 as standard encoding
+if !has('nvim')  " NeoVim defaults to this. REMOVED from neovim
+    set encoding=utf-8
+end
+scriptencoding utf-8
+set fileencoding=utf-8
+set termencoding=utf-8
+
+" End of line order of preference
+set fileformats=unix,dos,mac
+
+" Commands
+set showcmd
+set cmdheight=1
+
+if has('nvim')
+    set inccommand=nosplit " Preview command results
+endif
+
+" No annoying sound on errors
+set noerrorbells visualbell t_vb=
+autocmd vimrc GUIEnter * set visualbell t_vb=
+
+" Allow changing buffer without saving
+set hidden
+
+" Don't use swap files
+set noswapfile
+
+" Don't create backups
+set nobackup
+
+set history=10000
+
+" Save cursor position, folds etc.
+set viewoptions=cursor,folds,options,slash,unix
+
+" Don't show Insert, Replace or Visual mode info
+set noshowmode
+
+" Always show tab line
+set showtabline=2
+" Max number of tab pages to open
+set tabpagemax=15
+
+" Line numbers
+set number
+
+" Show line/column number
+set ruler
+" See :h 'statusline'
+set rulerformat=%30(%=b%n\ %y%m%r\ %l,%c%V\ %P%)
+
+" Statusline. See :h 'statusline'
+if has('statusline')
+    set laststatus=2                        " Always show statusline
+    set statusline=%<%f\                    " Filename
+    set statusline+=%w%h%m%r                " Preview,Help,Modified,Readonly
+    set statusline+=[%{&ff}/%y]             " File Type
+    set statusline+=%*%=
+    set statusline+=%-14.(%l,%c%V%)\ %p%%   " Right aligned file nav info
+endif
+
+" See :h 'shortmess'
+set shortmess+=filmnrxoOtTIc
+
+" Conceal Settings
+set concealcursor-=n
+set conceallevel=2
+
+" Specify the behavior when switching between buffers
+set switchbuf=useopen,usetab,newtab
+
+" Open new split panes to right and bottom
+set splitbelow
+set splitright
+
+" View text with folds
+set foldenable
+
+" No extra spaces between lines
+set linespace=0
+
+" Allow backspace over indent, line breaks and start of insert
+set backspace=indent,eol,start
+
+" Allow the cursor to move just past the end of the line
+set virtualedit=onemore
+
+" Keep cursor in same column
+set nostartofline
+
+" Highlight current line
+set cursorline
+autocmd vimrc WinEnter * set cursorline
+autocmd vimrc WinLeave * set nocursorline
+
+" Set to auto read when a file is changed from the outside
+set autoread
+
+" Switch CWD to the directory of the open buffer
+" set autochdir
+
+" Scroll
+set scrolloff=3
+set sidescrolloff=5
+set scrolljump=5
+
+" Use the following as end of word designators
+set iskeyword-=.
+set iskeyword-=#
+set iskeyword-=-
+set iskeyword+=:
+
+" Formatting options. See :h fo-table
+set formatoptions=croqn1j
+
+" Insert single space while joining lines
+set nojoinspaces
+
+" Whitespaces
+set list
+" Custom characters
+set listchars=tab:⏵\ ,trail:∙,
+set listchars+=extends:→,precedes:←,
+set listchars+=eol:↓,nbsp:∙,
+" Show lines that have been wrapped
+let &showbreak = '↪'
+
+" Character to use for vertical splits
+set fillchars=fold:\—,vert:\│
+
+" Tabs
+set tabstop=8                     " A hard TAB displays as 8 columns
+set softtabstop=4                 " Insert/delete 4 spaces when hitting a TAB/BACKSPACE
+set shiftwidth=4                  " Operation >> indents 4 columns; << un-indents 4 columns
+set expandtab                     " In insert mode, insert the appropriate number of spaces to insert a Tab
+set smarttab                      " Insert tabs in front of lines according to shiftwidth
+set shiftround                    " Round indent to multiple of 'shiftwidth'
+set autoindent                    " Align the new line indent with the previous line
+set cindent                       " Automatic C programming indenting
+
+" Line wrapping
+set wrap                          " Visually wrap lines too long
+set nowrapscan                    " Don't wrap searches around end of file
+set whichwrap=b,s,h,l,<,>,[,]     " Backspace and cursor keys wrap too
+set breakindent                   " Preserve indent of wrapped lines
+set breakindentopt=sbr
+set showbreak=⌞
+set linebreak                     " Wrap long lines at 'breakat' character
+
+set showmatch                     " Show matching brackets/parenthesis
+
+" Clipboard
+if has('clipboard')
+    if has('unnamedplus')
+        set clipboard^=unnamed,unnamedplus
+    else
+        set clipboard^=unnamed
+    endif
+endif
+
+" Use RipGrep as grepprg
+if executable('rg')
+    set grepprg=rg\ --vimgrep\ --smart-case\ --no-heading
+    set grepformat^=%f:%l:%c:%m   " file:line:column:message
+endif
+
+" Search
+set magic                         " Magic pattern matching
+set incsearch                     " Find as you type search
+set hlsearch                      " Highlight search terms
+set ignorecase                    " Case insensitive search
+set infercase                     " Case sensitive completions
+set smartcase                     " Case sensitive when upper case is present
+set gdefault                      " Work on all matches on the line
+
+" Always show menu. Complete longest match
+set completeopt=menuone,longest
+set wildmenu                      " Show list instead of just completing
+set wildmode=list:longest,full    " Command <Tab> completion, list matches, then longest common part, then all
+" Ignore unreadable files
+set wildignore+=*.jpg,*.jpeg,*.png,*.gif,*.bmp,*.ico
+set wildignore+=.git,.svn,.hg
+set wildignore+=*.o,*.obj,*~,*.pyc,*.so,*.exe,*.class
+set wildignore+=*node_modules/**
+set wildignore+=*.zip,*.tar.gz,*.tar.bz2,*.rar,*.tar.xz
+set wildignore+=.DS_Store,*.swp
+
+" Colors
+set background=dark
+
+if (has("termguicolors"))
+    set termguicolors
+endif
+
+" Set the colorscheme if installed
+silent! colorscheme neodark
+
+" GUI
+if has("gui_running")
+    set guioptions=egmrti
+    set guioptions+= lines=40 columns=140
+    set guioptions-=T
+endif
+
+" Mouse
+set mouse=a
+set mousehide
+" }}}
+
+" Helper functions {{{
+function! s:IsWhitespace() abort "{{{
+    let col = col('.') - 1
+    return ! col || getline('.')[col - 1] =~? '\s'
+endfunction "}}}
+
+function! s:ExecuteMacroOverVisualRange() abort "{{{
+    echo "@".getcmdline()
+    execute ":'<,'>normal @".nr2char(getchar())
+endfunction }}}"
+
+function! s:SearchForTerm() abort "{{{
+    let s:grepTerm = input("Search Term: ")
+    if !empty(s:grepTerm)
+        execute 'silent grep' escape(s:grepTerm, "%#!") | copen
+    endif
+    redraw!
+endfunction }}}"
+" }}}
+
+" Mappings {{{
+" Disable Ex mode
+nnoremap Q <Nop>
+
+" Shift key fixes
+cnoreabbrev W   w
+cnoreabbrev W!  w!
+cnoreabbrev Q   q
+cnoreabbrev Q!  q!
+cnoreabbrev Qa  qa
+cnoreabbrev Qa! qa!
+cnoreabbrev Wq  wq
+cnoreabbrev wQ  wq
+cnoreabbrev WQ  wq
+cnoreabbrev Wa  wa
+
+" Use sane magic regexes
+nnoremap / /\v
+vnoremap / /\v
+
+" Mappings to switch between windows
+nnoremap <C-h> <C-w>h
+nnoremap <C-j> <C-w>j
+nnoremap <C-k> <C-w>k
+nnoremap <C-l> <C-w>l
+
+" Move around inside wrapped long lines
+nnoremap <expr> j  v:count == 0 ? 'gj' : 'j'
+nnoremap <expr> k  v:count == 0 ? 'gk' : 'k'
+nnoremap <expr> gj v:count == 0 ? 'j' : 'gj'
+nnoremap <expr> gk v:count == 0 ? 'k' : 'gk'
+
+" Visual shifting (does not exit Visual mode)
+vnoremap < <gv
+vnoremap > >gv
+
+" Allow using the repeat operator with a visual selection
+vnoremap . :normal .<cr>
+
+" Make Y yank everything from the cursor to the end of the line.
+noremap Y y$
+
+" Use 'c*' to change the word under the cursor, repeat with ''
+nnoremap c* *<C-o>cgn
+
+" Edit mode helpers from http://vimcasts.org/e/14
+cnoremap %% <C-R>=fnameescape(expand('%:h')).'/'<cr>
+map <leader>ew :edit    %%
+map <leader>es :split   %%
+map <leader>ev :vsplit  %%
+map <leader>et :tabedit %%
+
+" Change Working Directory to that of the current file
+nnoremap <leader>cd :lcd %:p:h<cr>:pwd<cr>
+
+" Buffer management mappings
+nnoremap <leader>bd :bdelete<cr>
+nnoremap <leader>ba :%bdelete<cr>
+nnoremap <leader>bn :bnext<cr>
+nnoremap <leader>bp :bprevious<cr>
+
+" Tab management mappings
+nnoremap <leader>tc :tabclose<cr>
+nnoremap <leader>tn :tabnext<cr>
+nnoremap <leader>to :tabonly<cr>
+nnoremap <leader>tp :tabprevious<cr>
+
+" Code folding mappings
+nnoremap <leader>f0 :set foldlevel=0<cr>
+nnoremap <leader>f1 :set foldlevel=1<cr>
+nnoremap <leader>f2 :set foldlevel=2<cr>
+nnoremap <leader>f3 :set foldlevel=3<cr>
+nnoremap <leader>f4 :set foldlevel=4<cr>
+nnoremap <leader>f5 :set foldlevel=5<cr>
+nnoremap <leader>f6 :set foldlevel=6<cr>
+nnoremap <leader>f7 :set foldlevel=7<cr>
+nnoremap <leader>f8 :set foldlevel=8<cr>
+nnoremap <leader>f9 :set foldlevel=9<cr>
+
+" Disable highlight when <leader><cr> is pressed
+nnoremap <leader><cr> :nohlsearch<cr>
+
+" Toggle relativenumber on and off
+nnoremap <leader>nu :setlocal relativenumber!<cr>
+
+" Toggle paste mode on and off
+nnoremap <leader>pp :setlocal paste!<cr>
+
+" Loclist mappings
+nnoremap <leader>lo :lopen<cr>
+nnoremap <leader>ln :lnext<cr>
+nnoremap <leader>lp :lprev<cr>
+
+" Quickfix mappings
+nnoremap <leader>qf :cwindow<cr>
+nnoremap <leader>qo :copen<cr>
+nnoremap <leader>qc :cclose<cr>
+
+" Use grepprg to search for word under cursor (<C-l> redraws the screen)
+nnoremap <leader>* :silent grep <cword> \| copen<cr><C-l>
+
+" Search for given grep term
+nnoremap <leader>g* :call <SID>SearchForTerm()<cr>
+
+" Execute macro over visual selection
+xnoremap @ :<C-u>call <SID>ExecuteMacroOverVisualRange()<cr>
+
+" Insert Completion Mappings
+" Do not map ESC. See http://vim.wikia.com/wiki/Improve_completion_popup_menu
+inoremap <expr> <Down> pumvisible() ? "\<C-n>"      : "\<Down>"
+inoremap <expr> <Up>   pumvisible() ? "\<C-p>"      : "\<Up>"
+inoremap <expr> <C-j>  pumvisible() ? "\<Down>"     : "\<C-j>"
+inoremap <expr> <C-k>  pumvisible() ? "\<Up>"       : "\<C-k>"
+inoremap <expr> <C-d>  pumvisible() ? "\<PageDown>" : "\<C-d>"
+inoremap <expr> <C-u>  pumvisible() ? "\<PageUp>"   : "\<C-u>"
+" }}}
+
+" Autocmds {{{
+" Exclude quickfix windows from buflist
+autocmd vimrc FileType qf set nobuflisted
+
+" Resize splits when the window is resized
+autocmd vimrc VimResized * :wincmd =
+
+" Close popup menu
+autocmd vimrc InsertLeave,CompleteDone * if pumvisible() == 0 | pclose | endif
+
+" Set cursor at first line when editing a git commit message
+autocmd vimrc FileType gitcommit autocmd! BufEnter COMMIT_EDITMSG call setpos('.', [0, 1, 1, 0])
+
+" Highlight TODO, FIXME, NOTE, etc.
+autocmd vimrc Syntax * call matchadd('Todo',  '\W\zs\(TODO\|FIXME\|CHANGED\|XXX\|BUG\|HACK\)')
+autocmd vimrc Syntax * call matchadd('Debug', '\W\zs\(NOTE\|INFO\|IDEA\|DEBUG\)')
+" }}}
+

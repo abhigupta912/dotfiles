@@ -1,0 +1,32 @@
+# vim:syntax=sh
+# vim:filetype=sh
+# vim:foldlevel=0
+# vim:foldmethod=marker
+# vim:formatoptions=crqn1j
+
+add_path /usr/local/opt/ruby/bin
+add_path "$(gem env gemdir)/bin"
+
+add_path /usr/local/opt/python/libexec/bin
+
+add_path /usr/local/opt/util-linux/bin
+add_path /usr/local/opt/util-linux/sbin
+
+add_path /usr/local/opt/make/libexec/gnubin
+add_path /usr/local/opt/unzip/bin
+
+add_path /usr/local/opt/binutils/bin
+add_path /usr/local/opt/coreutils/libexec/gnubin
+
+add_path /usr/local/opt/ed/libexec/gnubin
+add_path /usr/local/opt/grep/libexec/gnubin
+
+add_path /usr/local/opt/openssl/bin
+
+add_path /usr/local/opt/gnu-indent/libexec/gnubin
+add_path /usr/local/opt/gnu-which/libexec/gnubin
+add_path /usr/local/opt/gnu-tar/libexec/gnubin
+add_path /usr/local/opt/gnu-sed/libexec/gnubin
+
+add_path /usr/local/opt/findutils/libexec/gnubin
+

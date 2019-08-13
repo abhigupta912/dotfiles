@@ -1,0 +1,98 @@
+# vim:syntax=sh
+# vim:filetype=sh
+# vim:foldlevel=0
+# vim:foldmethod=marker
+# vim:formatoptions=crqn1j
+
+# If not running interactively, don't do anything
+[[ $- != *i* ]] && return
+
+# Bash-It {{{
+source ${HOME}/.config/bash/bashit
+
+unalias ls
+unalias cls
+unalias l
+unalias l1
+unalias la
+unalias ll
+unalias sl
+# }}}
+
+# Base Shell Config {{{
+source ${HOME}/.config/shell/profile
+# }}}
+
+# Bash Options {{{
+source ${HOME}/.config/bash/options
+# }}}
+
+# Bash Completion {{{
+export SYSTEM=$(uname -s)
+
+case "${SYSTEM}" in
+    Linux*)
+        if [ -f ${HOME}/.config/bash/completion/linux ]; then
+            source ${HOME}/.config/bash/completion/linux
+        fi
+        ;;
+    Darwin*)
+        if [ -f ${HOME}/.config/bash/completion/darwin ]; then
+            source ${HOME}/.config/bash/completion/darwin
+        fi
+        ;;
+esac
+# }}}
+
+# FZF {{{
+# Installtion:
+if [ -f ${HOME}/.config/fzf/fzf.bash ]; then
+    source ${HOME}/.config/fzf/fzf.bash
+fi
+
+# Usage:
+# Ctrl + r - search through bash history with fzf
+# mv dir/** - expand a directory with (**) and select from fzf
+# Alt + c - change directory from fzf
+# Ctrl + t - insert file from fzf into command
+
+# export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!{.git,node_modules}/*" 2> /dev/null'
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+# }}}
+
+# Forgit {{{
+# Options:
+export FORGIT_FZF_DEFAULT_OPTS="
+--exact
+--border
+--cycle
+--reverse
+--height '80%'
+"
+
+# Installtion:
+if [ -f ${HOME}/.config/forgit/forgit.plugin.zsh ]; then
+    source ${HOME}/.config/forgit/forgit.plugin.zsh
+fi
+# }}}
+
+# Enhancd {{{
+# Reference: https://github.com/b4b4r07/enhancd
+export ENHANCD_COMMAND=ecd
+if [ -f ${HOME}/.config/enhancd/init.sh ]; then
+    source ${HOME}/.config/enhancd/init.sh
+fi
+# }}}
+
+# Functions {{{
+source ${HOME}/.config/bash/functions
+# }}}
+
+# Node {{{
+# NVM
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+# NVM Completions
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
+# }}}
+

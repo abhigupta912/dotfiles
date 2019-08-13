@@ -1,0 +1,230 @@
+compinit -d ${ZDOTDIR}/zcompdump
+zstyle ':completion:*' cache-path "${ZDOTDIR}/cache"
+
+for file in $ext_files; do
+    [[ -f ${ZDOTDIR}/${file} ]] && source ${ZDOTDIR}/${file}
+done
+
+# Original zshrc follows
+autoload -U  colors     && colors
+
+HISTSIZE=1000
+SAVEHIST=1000
+
+setopt inc_append_history
+setopt hist_ignore_all_dups
+setopt hist_reduce_blanks
+setopt hist_verify
+
+setopt auto_cd           # cd by entering it as command
+setopt cd_able_vars
+setopt auto_pushd        # make cd push old dir in dir stack
+setopt pushd_ignore_dups # no duplicates in dir stack
+setopt pushd_silent      # no dir stack after pushd or popd
+setopt pushd_to_home     # `pushd` = `pushd $HOME`
+
+setopt no_beep
+setopt no_list_beep
+setopt no_hist_beep
+
+setopt extended_glob     # activate complex pattern globbing
+setopt multios           # perform implicit tees or cats when multiple redirections are attempted
+setopt correct           # correct the spelling of commands
+setopt auto_list         # list choices on ambiguous completion
+setopt auto_param_slash
+setopt auto_param_keys
+setopt complete_in_word
+setopt always_to_end     # move cursor to end on completion
+#setopt no_clobber        # prevent redirection from truncating file if it already exists
+
+# VI key bindings
+bindkey -v
+bindkey -a   'gg' beginning-of-buffer-or-history
+bindkey -a   'g~' vi-oper-swap-case
+bindkey -a   G    end-of-buffer-or-history
+bindkey -a   u    undo
+bindkey -a   '^R' redo
+bindkey "^?" backward-delete-char
+bindkey "^W" backward-kill-word
+bindkey "^U" backward-kill-line
+bindkey "^H" backward-delete-char
+bindkey '^G' what-cursor-position
+
+autoload -Uz compinit   && compinit
+
+zstyle :compinstall                  filename         ~/.zshrc
+
+zstyle ':completion:*'               use-cache         on                    # use cache
+zstyle ':completion:*'               cache-path        ~/.zsh/cache
+
+zstyle ':completion:*'               completer         _complete _correct _expand _match _approximate
+zstyle ':completion:*:match:*'       original          only
+zstyle ':completion:*:approximate:*' max-errors        'reply=($((($#PREFIX+$#SUFFIX)/3))numeric)'
+
+zstyle ':completion:*'               matcher-list      'm:{a-zA-Z}={A-Za-z}' # ignore case
+zstyle ':completion:*'               menu              select=2              # menu if number of items > 2
+
+zstyle ':completion:*:functions'     ignored-patterns  '_*'                  # no completion for unavailable commands
+
+zstyle ':completion:*:*:kill:*'      menu              yes       select      # show PIDs as menu selection with kill command
+zstyle ':completion:*:kill:*'        force-list        always
+
+zstyle ':completion:*:cd:*'          ignore-parents    parent    pwd         # cd command ignores parent directory
+
+zstyle ':completion:*'               list-colors       ${(s.:.)LS_COLORS}    # colorz !
+
+# Quick change directories
+rationalise-dot() {
+    if [[ $LBUFFER = *.. ]]; then
+        LBUFFER+=/..
+    else
+        LBUFFER+=.
+    fi
+}
+
+zle     -N rationalise-dot
+bindkey .  rationalise-dot
+
+autoload -Uz promptinit && promptinit
+
+# Prompt
+setopt prompt_subst
+
+# Git prompt
+autoload -Uz vcs_info
+
+autoload -U  add-zsh-hook
+
+zstyle ':vcs_info:*' enable            git
+zstyle ':vcs_info:*' check-for-changes true
+zstyle ':vcs_info:*' formats           "%{$fg[yellow]%}%c%{$fg[green]%}%u%{$reset_color%} [%{$fg[blue]%}%b%{$reset_color%}] %{$fg[yellow]%}%s%{$reset_color%}:%r"
+
+function set_title() {
+    if [[ "$TERM" == screen* ]]; then
+        print -Pn "\ek${PWD}\e\\"
+    else
+        print -Pn "\e]2;${PWD}\a"
+    fi
+}
+
+# Run before each prompt
+precmd() {
+    set_title
+    vcs_info
+}
+
+# Root is red, other user is green
+color="green"
+if [ "$USER" = "root" ]; then
+    color="red"
+fi;
+
+pwd_str="%{$fg_bold[blue]%}[%{$reset_color%}%{$fg_bold[green]%}%~%{$reset_color%}%{$fg_bold[blue]%}]%{$reset_color%}"
+
+# Git status
+
+GIT_PROMPT_PREFIX="%{$fg_bold[blue]%}[%{$reset_color%}"
+GIT_PROMPT_SUFFIX="%{$fg_bold[blue]%}]%{$reset_color%}"
+GIT_PROMPT_CLEAN="%{$fg_bold[green]%}✓%{$reset_color%}"
+GIT_PROMPT_AHEAD="%{$fg[cyan]%}▴%{$reset_color%}"
+GIT_PROMPT_BEHIND="%{$fg[magenta]%}▾%{$reset_color%}"
+GIT_PROMPT_STAGED="%{$fg_bold[green]%}•%{$reset_color%}"
+GIT_PROMPT_UNSTAGED="%{$fg_bold[yellow]%}•%{$reset_color%}"
+GIT_PROMPT_UNTRACKED="%{$fg_bold[red]%}•%{$reset_color%}"
+GIT_PROMPT_DIVERGED="[%{$fg_bold[red]%}±%{$reset_color%}"
+
+git_branch () {
+    ref=$(command git symbolic-ref HEAD 2> /dev/null) || \
+    ref=$(command git rev-parse --short HEAD 2> /dev/null) || return
+    echo "${ref#refs/heads/}"
+}
+
+git_status () {
+    _INDEX=$(command git status --porcelain -b 2> /dev/null)
+    _STATUS=""
+    if $(echo "$_INDEX" | grep '^[AMRD]. ' &> /dev/null); then
+        _STATUS="$_STATUS$GIT_PROMPT_STAGED"
+    fi
+    if $(echo "$_INDEX" | grep '^.[MTD] ' &> /dev/null); then
+        _STATUS="$_STATUS$GIT_PROMPT_UNSTAGED"
+    fi
+    if $(echo "$_INDEX" | command grep -E '^\?\? ' &> /dev/null); then
+        _STATUS="$_STATUS$GIT_PROMPT_UNTRACKED"
+    fi
+    if $(echo "$_INDEX" | grep '^UU ' &> /dev/null); then
+        _STATUS="$_STATUS$GIT_PROMPT_UNMERGED"
+    fi
+    if $(command git rev-parse --verify refs/stash >/dev/null 2>&1); then
+        _STATUS="$_STATUS$GIT_PROMPT_STASHED"
+    fi
+    if $(echo "$_INDEX" | grep '^## .*ahead' &> /dev/null); then
+        _STATUS="$_STATUS$GIT_PROMPT_AHEAD"
+    fi
+    if $(echo "$_INDEX" | grep '^## .*behind' &> /dev/null); then
+        _STATUS="$_STATUS$GIT_PROMPT_BEHIND"
+    fi
+    if $(echo "$_INDEX" | grep '^## .*diverged' &> /dev/null); then
+        _STATUS="$_STATUS$GIT_PROMPT_DIVERGED"
+    fi
+
+    echo $_STATUS
+}
+
+git_prompt () {
+    local _branch=$(git_branch)
+    local _status=$(git_status)
+    local _result=""
+    if [[ "${_branch}x" != "x" ]]; then
+        _result="$GIT_PROMPT_PREFIX$_branch"
+        if [[ "${_status}x" != "x" ]]; then
+            _result="$_result $_status"
+        fi
+        _result="$_result$GIT_PROMPT_SUFFIX"
+    fi
+    echo $_result
+}
+
+function prompt_line_start() {
+    echo "${pwd_str} $(git_prompt)"
+}
+
+function prompt_line_end() {
+    echo "%{$fg_bold[$color]%} ➜ %{$reset_color%}"
+}
+
+PROMPT='
+$(prompt_line_start)
+$(prompt_line_end)'
+
+# Alias
+alias mvn='nocorrect mvn'
+alias gitlog='nocorrect git log --format="%Cred%h%Creset (%Cblue%an%Creset %Cgreen%ad%Creset) %s %Cred%d%Creset"'
+
+source ~/dotfiles/shell/commons
+
+
+# FZF {{{
+# Installtion:
+# Installed locally
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+# Usage:
+# Ctrl + r - search through bash history with fzf
+# mv dir/** - expand a directory with (**) and select from fzf
+# Alt + c - change directory from fzf
+# Ctrl + t - insert file from fzf into command
+
+# export FZF_DEFAULT_COMMAND='rg --files --no-ignore --hidden --follow --glob "!{.git,node_modules}/*" 2> /dev/null'
+export FZF_DEFAULT_COMMAND='fd --type f --hidden --follow --exclude .git'
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+
+# Use fd (https://github.com/sharkdp/fd) instead of the default find command for listing path candidates.
+_fzf_compgen_path() {
+  fd --hidden --follow --exclude ".git" . "$1"
+}
+
+# Use fd to generate the list for directory completion
+_fzf_compgen_dir() {
+  fd --type d --hidden --follow --exclude ".git" . "$1"
+}
+# }}}

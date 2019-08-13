@@ -1,0 +1,20 @@
+# vim:syntax=sh
+# vim:filetype=sh
+# vim:foldlevel=0
+# vim:foldmethod=marker
+# vim:formatoptions=crqn1j
+
+# Dircolors {{{
+if type dircolors >/dev/null ; then
+    if [ -r ${HOME}/.config/dircolors ]; then
+        eval $(dircolors -b ${HOME}/.config/dircolors)
+    elif [ -r ${HOME}/.dir_colors ]; then
+        eval $(dircolors -b ${HOME}/.dir_colors)
+    elif [ -r /etc/DIR_COLORS ]; then
+        eval $(dircolors -b /etc/DIR_COLORS)
+    else
+        eval $(dircolors --print-database)
+    fi
+fi
+# }}}
+

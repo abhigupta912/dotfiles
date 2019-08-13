@@ -1,0 +1,27 @@
+# vim:syntax=zsh
+# vim:filetype=zsh
+# vim:foldlevel=0
+# vim:foldmethod=marker
+# vim:formatoptions=crqn1j
+
+# Global {{{
+skip_global_compinit=1
+# Ignore global rc files
+setopt noglobalrcs
+# }}}
+
+# XDG Directories {{{
+export XDG_CONFIG_HOME=${XDG_CONFIG_HOME:-$HOME/.config}
+export XDG_CACHE_HOME=${XDG_CACHE_HOME:-$HOME/.cache}
+# }}}
+
+# Zsh {{{
+export ZSH_CACHE_DIR=${XDG_CACHE_HOME}/zsh
+export HISTFILE=${ZSH_CACHE_DIR}/zhistory
+export ZDOTDIR=${XDG_CONFIG_HOME}/zsh
+
+if [[ ( "$SHLVL" -eq 1 && ! -o LOGIN ) && -s "${ZDOTDIR:-$HOME}/.zprofile" ]]; then
+    source "${ZDOTDIR:-$HOME}/.zprofile"
+fi
+# }}}
+

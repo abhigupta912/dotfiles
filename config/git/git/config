@@ -1,0 +1,81 @@
+; vim:filetype=gitconfig
+
+[user]
+    name = Abhishek Gupta
+    email = abhigupta912@gmail.com
+
+[core]
+    autocrlf = input
+    editor = nvim
+    pager = diff-so-fancy | less --tabs=4 -RFX
+    ; pager = less -F -X
+
+[pager]
+    diff = diff-so-fancy | less --tabs=4 -RFXS --pattern '^(Date|added|deleted|modified): '
+    show = diff-so-fancy | less --tabs=4 -RFXS --pattern '^(Date|added|deleted|modified): '
+
+[color]
+    ui = true
+[color "diff-highlight"]
+    oldNormal = red bold
+    oldHighlight = red bold 52
+    newNormal = green bold
+    newHighlight = green bold 22
+[color "diff"]
+    meta = 11
+    frag = magenta bold
+    commit = yellow bold
+    old = red bold
+    new = green bold
+    whitespace = red reverse
+
+[credential]
+    helper = cache
+
+[diff]
+    algorithm = histogram
+    indentHeuristic = true
+    tool = vimdiff
+[difftool]
+    prompt = false
+[difftool "vimdiff"]
+    cmd = nvim -d $LOCAL $REMOTE
+[diff-so-fancy]
+    markEmptyLines = false
+    changeHunkIndicators = false
+    rulerWidth = 72
+
+[merge]
+    conflictStyle = diff3
+    tool = vimdiff
+[mergetool]
+    prompt = false
+[mergetool "vimdiff"]
+    cmd = nvim -d $LOCAL $BASE $REMOTE $MERGED
+    keepBackup = false
+
+[format]
+    pretty = format:%C(bold blue)[%h]%C(reset) %C(bold cyan)[%ai]%C(reset) %C(auto)%d%C(reset)%n          %C(bold green)[%aN]%C(reset) %C(bold white)%s%C(reset)
+
+[log]
+    date = short
+
+[pull]
+    rebase = true
+
+[push]
+    default = simple
+    followTags = true
+
+[branch]
+    autoSetupRebase = always
+
+[rebase]
+    autoSquash = true
+    autoStash = true
+
+[status]
+    branch = true
+    showStash = true
+    showUntrackedFiles = all
+

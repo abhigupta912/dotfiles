@@ -1,0 +1,21 @@
+# vim:syntax=sh
+# vim:filetype=sh
+# vim:foldlevel=0
+# vim:foldmethod=marker
+# vim:formatoptions=crqn1j
+
+# India {{{
+if [ -z "$LANG" ]; then
+    export LANG='en_IN.UTF-8'
+    export LANGUAGE=en_IN.UTF-8
+fi
+
+export LC_ALL=en_IN.UTF-8
+export LC_COLLATE=en_IN.UTF-8
+export LC_CTYPE=en_IN.UTF-8
+export LC_MESSAGES=en_IN.UTF-8
+export LC_MONETARY=en_IN.UTF-8
+export LC_NUMERIC=en_IN.UTF-8
+export LC_TIME=en_IN.UTF-8
+# }}}
+

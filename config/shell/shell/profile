@@ -1,0 +1,23 @@
+# vim:syntax=sh
+# vim:filetype=sh
+# vim:foldlevel=0
+# vim:foldmethod=marker
+# vim:formatoptions=crqn1j
+
+# Source {{{
+source ${HOME}/.config/shell/xdg
+
+source ${HOME}/.config/shell/locale
+
+source ${HOME}/.config/shell/path
+
+source ${HOME}/.config/shell/dircolors
+
+source ${HOME}/.config/shell/cmds/less
+source ${HOME}/.config/shell/cmds/ls
+
+source ${HOME}/.config/shell/exports
+
+source ${HOME}/.config/shell/alias
+# }}}
+
