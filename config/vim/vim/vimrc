@@ -418,7 +418,8 @@ set nojoinspaces
 " Whitespaces
 set list
 " Custom characters
-set listchars=tab:⏵\ ,trail:∙,
+" set listchars=tab:⏵\ ,trail:∙,
+set listchars=tab:⇥\ ,trail:∙,
 set listchars+=extends:→,precedes:←,
 set listchars+=eol:↓,nbsp:∙,
 " Show lines that have been wrapped

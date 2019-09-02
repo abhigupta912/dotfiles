@@ -6,7 +6,7 @@
 
 [core]
     autocrlf = input
-    editor = nvim
+    editor = vim
     pager = diff-so-fancy | less --tabs=4 -RFX
     ; pager = less -F -X
 
@@ -39,7 +39,7 @@
 [difftool]
     prompt = false
 [difftool "vimdiff"]
-    cmd = nvim -d $LOCAL $REMOTE
+    cmd = vim -d $LOCAL $REMOTE
 [diff-so-fancy]
     markEmptyLines = false
     changeHunkIndicators = false
@@ -51,7 +51,7 @@
 [mergetool]
     prompt = false
 [mergetool "vimdiff"]
-    cmd = nvim -d $LOCAL $BASE $REMOTE $MERGED
+    cmd = vim -d $LOCAL $BASE $REMOTE $MERGED
     keepBackup = false
 
 [format]

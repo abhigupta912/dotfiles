@@ -39,7 +39,8 @@ brew install wget
 brew install nmap
 brew install gpg
 brew install htop
-brew install openssh
+# brew install openssh
+# brew install openssl
 brew install gawk
 
 brew install make

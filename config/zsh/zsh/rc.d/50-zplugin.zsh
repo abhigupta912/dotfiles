@@ -17,7 +17,7 @@ ZPLGM[SERVICES_DIR]=${ZPLGM[HOME_DIR]}/services
 
 ZPFX=${ZPLGM[HOME_DIR]}/polaris
 
-ZPLGM[ZCOMPDUMP_PATH]=${ZSH_CACHE_DIR}/zplugin/.zcompdump
+ZPLGM[ZCOMPDUMP_PATH]=${ZSH_CACHE_DIR}/zcompdump
 
 ZPLGM[COMPINIT_OPTS]="-C"
 ZPLGM[MUTE_WARNINGS]=0
@@ -31,8 +31,8 @@ if [[ ! -d ${ZPLGM[HOME_DIR]} ]]; then
 fi
 
 # Create cache directory
-if [[ ! -d ${ZSH_CACHE_DIR}/zplugin ]]; then
-    mkdir -p ${ZSH_CACHE_DIR}/zplugin
+if [[ ! -d ${ZSH_CACHE_DIR}/zcompdump ]]; then
+    mkdir -p ${ZSH_CACHE_DIR}/zcompdump
 fi
 
 # Enable completion

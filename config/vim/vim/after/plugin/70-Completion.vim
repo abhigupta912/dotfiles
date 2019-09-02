@@ -51,6 +51,7 @@ if exists('g:loaded_deoplete')
         " Reference: https://github.com/Shougo/neosnippet.vim
         imap <silent> <expr> <cr> pumvisible() ?
                     \ (neosnippet#expandable() ? neosnippet#mappings#expand_impl() : deoplete#close_popup())
+                    \ : "\<cr>"
 
         imap <silent> <expr> <tab> pumvisible() ? "\<Down>"
                     \ : (neosnippet#jumpable() ? "\<Plug>(neosnippet_jump)"
